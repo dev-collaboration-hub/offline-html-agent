@@ -664,5 +664,4 @@ License to be decided.
 
 ```
 
-Ye README project ko **HTML generator** se clearly differentiate karta hai: iska actual target **goal → autonomous complete project** hai, aur CPU/low-computation constraint bhi core architecture ka part bana diya hai.
 ```
