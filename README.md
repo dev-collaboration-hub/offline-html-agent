@@ -1,66 +1,43 @@
-
-````markdown
 # offline-html-agent
 
-A CPU-efficient, fully offline AI programming agent that takes a web-development goal and autonomously plans, builds, validates, repairs, and completes HTML/CSS/JavaScript projects.
-
----
+A CPU-efficient, fully offline AI programming agent that autonomously plans, builds, validates, repairs, and completes HTML, CSS, and JavaScript projects from a user-defined goal.
 
 ## Objective
 
-`offline-html-agent` is a local-first autonomous programming agent focused specifically on web projects built with:
+`offline-html-agent` is a local-first autonomous programming agent focused on completing web-development projects using:
 
-- HTML
-- CSS
-- JavaScript
+* HTML
+* CSS
+* JavaScript
 
-The user provides a goal.
+The user describes the desired project in natural language.
 
-Example:
+For example:
 
-> Build a responsive personal portfolio website with a dark mode, project section, contact form, and mobile navigation.
+> Build a responsive portfolio website with dark mode, a projects section, contact form, and mobile navigation.
 
-The agent should determine what needs to be built, create the required project structure, implement the code, validate the result, fix detected problems, and continue working until the requested goal is satisfied.
+The agent should understand the goal, derive requirements, plan the implementation, create or modify files, validate the project, repair detected problems, and continue until the requested goal is satisfied.
 
-The project is designed to operate:
+The system is designed to work:
 
-- fully offline,
-- on ordinary CPUs,
-- with low computational requirements,
-- with minimal memory usage,
-- without requiring cloud AI APIs.
+* Fully offline
+* On ordinary CPUs
+* With low computational requirements
+* With low memory usage
+* Without mandatory cloud AI APIs
+* Without requiring a GPU
 
 ---
 
-## Core Idea
+## Core Workflow
 
-The agent follows a goal-completion loop:
+The agent follows this process:
 
-```text
-User Goal
-    ↓
-Understand Requirements
-    ↓
-Create Project Plan
-    ↓
-Break Plan Into Tasks
-    ↓
-Generate / Modify Files
-    ↓
-Validate Code
-    ↓
-Detect Problems
-    ↓
-Repair Problems
-    ↓
-Check Goal Completion
-    ↓
-Complete Project
-````
+**User Goal → Requirements → Plan → Tasks → Implementation → Validation → Repair → Goal Check → Complete Project**
 
-The agent should not stop merely because code was generated.
+Generating code alone does not mean the task is complete.
 
-Its job is to determine whether the **project goal has actually been completed**.
+The agent must determine whether the original project goal has actually been satisfied.
 
 ---
 
@@ -70,431 +47,316 @@ Its job is to determine whether the **project goal has actually been completed**
 
 Core functionality must work without:
 
-* cloud APIs,
-* remote inference services,
-* internet access,
-* mandatory external AI providers.
+* Cloud APIs
+* Remote inference services
+* Internet connectivity
+* Mandatory external AI providers
 
-Internet access may eventually exist as an optional capability, but it must never be required by the core agent.
-
----
+Internet-based functionality may eventually be optional, but the core agent must remain usable offline.
 
 ### 2. CPU First
 
-The system should be designed for ordinary desktop and laptop CPUs.
+The architecture should be optimized for ordinary desktop and laptop CPUs.
 
-The architecture should avoid unnecessary:
+The system should avoid unnecessary:
 
-* large neural-network inference,
-* repeated full-project processing,
-* expensive embeddings,
-* GPU dependencies,
-* excessive memory allocation.
-
----
+* Large neural-network inference
+* Full-project regeneration
+* GPU dependencies
+* Repeated analysis
+* Excessive memory allocation
+* Expensive background computation
 
 ### 3. Low Computation
 
-The agent should perform the smallest amount of computation necessary to make progress.
+The agent should perform only the computation necessary for the current task.
 
-Examples:
-
-Instead of regenerating an entire project:
-
-```text
-Detect affected file
-→ locate affected section
-→ make minimal edit
-```
-
-Instead of repeatedly analysing every file:
-
-```text
-Track project state
-→ analyse only changed or relevant files
-```
-
----
-
-### 4. Goal Driven
-
-The user specifies **what should exist**, not every implementation step.
-
-Example:
-
-```text
-Goal:
-Create a responsive landing page for an AI startup.
-```
-
-The agent may derive:
-
-```text
-Requirements
-├── navigation
-├── hero section
-├── features section
-├── CTA
-├── responsive layout
-└── mobile navigation
-```
-
-The agent then converts those requirements into executable tasks.
-
----
-
-### 5. Project Completion
-
-Generating valid HTML alone is not considered success.
-
-The agent should verify:
-
-* required features exist,
-* required files exist,
-* HTML structure is valid,
-* referenced resources exist,
-* CSS selectors match the page,
-* JavaScript references valid DOM elements,
-* obvious runtime problems are absent,
-* requested functionality has been implemented.
-
-Only then should a task be considered complete.
-
----
-
-### 6. Incremental Editing
-
-Existing projects should be modified instead of unnecessarily regenerated.
-
-Example:
-
-```text
-User:
-Add dark mode.
-```
+If one CSS rule needs modification, the agent should not regenerate the entire project.
 
 Preferred behavior:
 
-```text
-Inspect existing project
-→ identify affected HTML/CSS/JS
-→ create minimal implementation plan
-→ modify affected sections
-→ validate changes
-```
+**Find affected requirement → Find affected file → Find affected section → Apply minimal change → Validate**
 
-Not:
+### 4. Goal Driven
 
-```text
-Regenerate entire website from scratch.
-```
+The user defines what should be created.
+
+The agent determines how to create it.
+
+A goal such as:
+
+> Create a responsive landing page for an AI startup.
+
+may produce requirements such as:
+
+* Navigation
+* Hero section
+* Features section
+* Call-to-action
+* Responsive layout
+* Mobile navigation
+
+These requirements then become implementation tasks.
+
+### 5. Incremental Editing
+
+Existing projects should be modified rather than unnecessarily regenerated.
+
+For example, when the user asks:
+
+> Add dark mode.
+
+The agent should:
+
+* Inspect the existing project
+* Locate relevant HTML, CSS, and JavaScript
+* Determine the minimal required changes
+* Modify only affected sections
+* Validate the result
+
+### 6. Deterministic Operations First
+
+Whenever a problem can be solved reliably without AI inference, deterministic algorithms should be preferred.
+
+Examples include:
+
+* HTML parsing
+* File discovery
+* Path validation
+* Duplicate ID detection
+* Dependency checking
+* Task tracking
+* Requirement coverage
+* Project graph construction
+* Changed-file detection
+
+This helps keep CPU usage low.
 
 ---
 
 ## Intended Capabilities
 
-The long-term agent should be able to:
+The agent should eventually be capable of:
 
-* create new web projects,
-* understand existing HTML projects,
-* generate HTML,
-* generate CSS,
-* generate JavaScript,
-* create project directories,
-* create and modify files,
-* maintain project state,
-* derive requirements from goals,
-* break requirements into tasks,
-* track task completion,
-* inspect generated code,
-* detect structural problems,
-* detect broken references,
-* detect incomplete requirements,
-* repair its own output,
-* iteratively improve a project,
-* determine when the requested project is complete.
-
----
-
-## Agent Architecture
-
-A possible high-level architecture:
-
-```text
-                ┌───────────────────┐
-                │     User Goal     │
-                └─────────┬─────────┘
-                          │
-                          ▼
-                ┌───────────────────┐
-                │ Goal Interpreter  │
-                └─────────┬─────────┘
-                          │
-                          ▼
-                ┌───────────────────┐
-                │ Requirement Model │
-                └─────────┬─────────┘
-                          │
-                          ▼
-                ┌───────────────────┐
-                │      Planner      │
-                └─────────┬─────────┘
-                          │
-                          ▼
-                ┌───────────────────┐
-                │   Task Manager    │
-                └─────────┬─────────┘
-                          │
-                          ▼
-                ┌───────────────────┐
-                │   Code Engine     │
-                └─────────┬─────────┘
-                          │
-                          ▼
-                ┌───────────────────┐
-                │ File Operations   │
-                └─────────┬─────────┘
-                          │
-                          ▼
-                ┌───────────────────┐
-                │     Validator     │
-                └─────────┬─────────┘
-                          │
-                          ▼
-                ┌───────────────────┐
-                │   Repair Engine   │
-                └─────────┬─────────┘
-                          │
-                          ▼
-                ┌───────────────────┐
-                │ Completion Check  │
-                └───────────────────┘
-```
+* Creating complete web projects
+* Understanding existing projects
+* Generating HTML
+* Generating CSS
+* Generating JavaScript
+* Creating folders and files
+* Editing existing code
+* Understanding file relationships
+* Extracting requirements from goals
+* Breaking requirements into tasks
+* Tracking project progress
+* Detecting incomplete functionality
+* Detecting structural errors
+* Detecting broken references
+* Repairing generated code
+* Revalidating repaired code
+* Determining whether the project goal is complete
 
 ---
 
-## Major Components
+## Core Architecture
+
+The system is divided into several focused components.
 
 ### Goal Interpreter
 
-Transforms a natural-language user goal into structured intent.
-
-Example:
-
-```text
-"Build a responsive calculator"
-```
-
-may become:
-
-```text
-project_type: web_application
-
-requirements:
-- calculator interface
-- numeric input
-- arithmetic operations
-- responsive layout
-```
-
----
+Understands the user's requested project and converts it into structured intent.
 
 ### Requirement Engine
 
 Maintains explicit project requirements.
 
-Every generated task should trace back to a requirement.
+Every implementation task should correspond to one or more requirements.
 
-This prevents the agent from randomly adding features that were never required.
-
----
+This reduces feature drift.
 
 ### Planner
 
-Converts requirements into an implementation strategy.
-
-Example:
-
-```text
-Requirement:
-Dark mode
-
-Plan:
-1. Add theme toggle
-2. Define dark-theme CSS
-3. Add JavaScript state toggle
-4. Persist preference if required
-5. Validate theme behavior
-```
-
----
+Determines how the requirements should be implemented.
 
 ### Task Manager
 
-Tracks small executable tasks.
+Breaks the plan into small executable tasks and tracks their status.
 
-Example:
+Possible task states include:
 
-```text
-[✓] Create index.html
-[✓] Create styles.css
-[✓] Build navigation
-[ ] Build hero section
-[ ] Add responsive styles
-[ ] Validate project
-```
-
----
-
-### Code Engine
-
-Creates or modifies code required by the current task.
-
-The engine should prefer targeted edits over complete regeneration.
-
----
+* Pending
+* Ready
+* Running
+* Completed
+* Failed
+* Blocked
 
 ### Project Model
 
-Maintains a lightweight representation of the repository.
+Maintains a lightweight representation of the current project.
 
-Example:
+It should understand:
 
-```text
-project/
-├── index.html
-├── css/
-│   └── styles.css
-└── js/
-    └── app.js
-```
+* Project files
+* File types
+* Dependencies
+* References
+* Components
+* Changed files
 
-The agent should understand relationships between these files.
+### Code Engine
 
----
+Creates and modifies HTML, CSS, and JavaScript.
+
+It should prefer small targeted edits instead of rewriting entire files.
+
+### File Engine
+
+Safely performs:
+
+* File creation
+* File reading
+* File modification
+* Directory creation
+* Project scanning
 
 ### Validator
 
-Checks whether produced code is structurally correct.
+Checks the generated project for problems.
 
-Possible checks include:
+Validation may include:
 
-* HTML structure,
-* duplicate IDs,
-* missing files,
-* broken file references,
-* invalid asset paths,
-* CSS/HTML mismatches,
-* JavaScript DOM references,
-* incomplete requirements.
-
----
+* HTML structure
+* Missing resources
+* Invalid file paths
+* Duplicate IDs
+* Broken references
+* Missing required elements
+* JavaScript DOM references
+* Requirement coverage
 
 ### Repair Engine
 
-Transforms detected problems into repair tasks.
+Takes detected problems and converts them into focused repair tasks.
 
-```text
-Problem
-↓
-Root cause
-↓
-Affected files
-↓
-Minimal repair
-↓
-Revalidation
-```
+The repair cycle is:
 
----
+**Problem → Root Cause → Affected Files → Minimal Repair → Revalidation**
 
 ### Completion Engine
 
-Determines whether the original goal has actually been satisfied.
+Determines whether the user's original goal has been satisfied.
 
-```text
-Original Goal
-      +
-Requirements
-      +
-Completed Tasks
-      +
-Validation Results
-      ↓
-Completion Decision
-```
+Possible project states:
 
-Possible states:
+* INCOMPLETE
+* WORKING
+* BLOCKED
+* VALIDATING
+* COMPLETE
 
-```text
-INCOMPLETE
-BLOCKED
-VALIDATING
-COMPLETE
-```
+The project should only become `COMPLETE` when required functionality has been implemented and validated.
 
 ---
 
 ## Efficiency Strategy
 
-The agent should minimize computation using:
+Low computation is a core requirement, not a later optimization.
 
 ### Incremental Analysis
 
-Only changed or relevant files should be reprocessed.
+Only relevant or changed files should be reprocessed whenever possible.
 
 ### Dependency Tracking
 
-The system should know relationships such as:
+The system should remember relationships between HTML, CSS, JavaScript, assets, and components.
 
-```text
-index.html
-    ↓ uses
-styles.css
+### Cached Project State
 
-index.html
-    ↓ loads
-app.js
-```
-
-### Structured State
-
-Important information should be stored explicitly rather than rediscovered repeatedly.
-
-### Deterministic Checks
-
-Whenever possible, use deterministic algorithms instead of AI inference.
-
-Examples:
-
-* HTML parsing
-* dependency checking
-* path validation
-* duplicate-ID detection
-* task tracking
-* requirement coverage
-* project graph analysis
+Information that has already been discovered should not be repeatedly recomputed unless the underlying file changes.
 
 ### Minimal Rewrites
 
-Modify the smallest possible code region.
+The agent should modify the smallest practical region of code.
+
+### Selective Validation
+
+A local change should initially trigger validation of affected components rather than unnecessarily validating everything.
+
+Full-project validation can run before final completion.
+
+### Lightweight Internal Representations
+
+Project state, requirements, tasks, and dependencies should use compact structured data rather than repeatedly reconstructing information from raw source files.
 
 ---
 
-## What This Project Is NOT
+## Goal Completion
 
-This project is not intended to become:
+The agent must distinguish between:
 
-* a general-purpose chatbot,
-* a cloud AI wrapper,
-* a GPU-dependent code generator,
-* a general autonomous computer-control agent,
-* a full IDE replacement,
-* a generic agent for every programming language.
+**Code generated**
+
+and:
+
+**Goal completed**
+
+A project should only be marked complete after checking:
+
+* All required features are represented
+* Required files exist
+* Required functionality is implemented
+* File references are valid
+* Detected problems are resolved
+* No required tasks remain unfinished
+* Requirement coverage is complete
+
+---
+
+## Example
+
+User goal:
+
+> Build a responsive expense tracker with add expense, delete expense, categories, total amount, and browser storage.
+
+The agent should derive requirements such as:
+
+1. Expense input
+2. Expense list
+3. Category support
+4. Delete functionality
+5. Total calculation
+6. Browser persistence
+7. Responsive interface
+
+Then it should:
+
+1. Create the project plan
+2. Create implementation tasks
+3. Generate required files
+4. Implement functionality
+5. Validate the project
+6. Detect missing or broken behavior
+7. Repair problems
+8. Check every requirement
+9. Mark the project complete
+
+---
+
+## What This Project Is Not
+
+`offline-html-agent` is not intended to become:
+
+* A general-purpose chatbot
+* A cloud AI wrapper
+* A GPU-dependent coding system
+* A generic computer-control agent
+* A full IDE replacement
+* A universal programming-language agent
 
 Its primary responsibility is:
 
-> **Efficiently completing HTML/CSS/JavaScript projects from user-defined goals on local CPU hardware.**
+**Complete HTML, CSS, and JavaScript projects from user-defined goals efficiently on local CPU hardware.**
 
 ---
 
@@ -502,166 +364,98 @@ Its primary responsibility is:
 
 ### M0 — Foundation
 
-* define objective
-* define architecture
-* define project state
-* define requirement model
-* define task model
-* establish deterministic file operations
+* Lock project objective
+* Define architecture
+* Define project state
+* Define requirement model
+* Define task model
+* Build safe file operations
 
 ### M1 — Project Understanding
 
-* scan project directories
-* identify HTML/CSS/JS files
-* build project representation
-* detect file relationships
+* Scan project directories
+* Detect HTML, CSS, and JavaScript
+* Build project representation
+* Discover file relationships
+* Track changed files
 
 ### M2 — Goal Understanding
 
-* accept user goals
-* extract requirements
-* normalize requirements
-* maintain requirement state
+* Accept natural-language project goals
+* Extract requirements
+* Normalize requirements
+* Maintain requirement state
 
 ### M3 — Planning
 
-* convert requirements into tasks
-* determine task dependencies
-* order tasks
-* track progress
+* Convert requirements into tasks
+* Determine dependencies
+* Order tasks
+* Track execution state
 
-### M4 — Code Generation
+### M4 — Code Engine
 
-* create HTML
-* create CSS
-* create JavaScript
-* create project structures
-* modify existing files
+* Generate HTML
+* Generate CSS
+* Generate JavaScript
+* Create project structures
+* Modify existing code
+* Support incremental edits
 
 ### M5 — Validation
 
-* HTML validation
-* resource validation
-* project consistency checks
-* CSS/DOM consistency checks
-* JavaScript reference checks
+* HTML checks
+* Resource checks
+* Dependency checks
+* DOM consistency checks
+* Requirement checks
 
 ### M6 — Self Repair
 
-* detect implementation failures
-* determine affected files
-* generate repair tasks
-* apply minimal corrections
-* revalidate changes
+* Detect implementation failures
+* Find root causes
+* Identify affected files
+* Apply minimal repairs
+* Revalidate changes
 
 ### M7 — Goal Completion
 
-* requirement coverage
-* completion reasoning
-* unresolved-task detection
-* deterministic completion report
+* Requirement coverage
+* Outstanding-task detection
+* Completion decision
+* Deterministic completion reports
 
-### M8 — Autonomous Project Loop
+### M8 — Autonomous Agent Loop
 
-```text
-Goal
-→ Plan
-→ Implement
-→ Validate
-→ Repair
-→ Re-check
-→ Complete
-```
+Combine planning, implementation, validation, repair, and completion checking into one controlled autonomous workflow.
 
-### M9 — Optimization
+### M9 — CPU Optimization
 
-* incremental analysis
-* cached project state
-* selective file processing
-* reduced memory usage
-* reduced CPU work
-* minimal code rewrites
-
----
-
-## Example
-
-Input:
-
-```text
-Build a responsive expense tracker with:
-
-- add expense
-- delete expense
-- total amount
-- category field
-- browser storage
-```
-
-Possible agent workflow:
-
-```text
-1. Parse goal
-2. Extract five requirements
-3. Design project structure
-4. Create implementation tasks
-5. Generate index.html
-6. Generate styles.css
-7. Generate app.js
-8. Validate resource links
-9. Validate required UI elements
-10. Validate JavaScript DOM references
-11. Check requirement coverage
-12. Repair missing functionality
-13. Revalidate
-14. Mark project COMPLETE
-```
-
-Output:
-
-```text
-expense-tracker/
-├── index.html
-├── styles.css
-└── app.js
-```
-
----
-
-## Project Status
-
-🚧 Early development / architecture stage.
-
-The architecture, interfaces, algorithms, and implementation will evolve while preserving the locked project objective.
+* Incremental analysis
+* Cached state
+* Selective processing
+* Minimal rewrites
+* Memory reduction
+* CPU-work reduction
+* Performance measurement
 
 ---
 
 ## Long-Term Vision
 
-`offline-html-agent` should make it possible for a user to describe a web project in plain language and let a lightweight local agent handle the implementation process.
+The intended user experience is simple:
 
-The final experience should move toward:
+**Describe the website you want → Agent plans it → Agent builds it → Agent checks it → Agent fixes it → Working project**
 
-```text
-Describe what you want.
-        ↓
-Agent builds it.
-        ↓
-Agent checks it.
-        ↓
-Agent fixes it.
-        ↓
-Working project.
-```
-
-without requiring powerful GPUs or permanent cloud connectivity.
+The system should achieve this locally while remaining lightweight enough to run efficiently on normal CPU hardware.
 
 ---
 
-## License
+## Project Status
 
-License to be decided.
+Early development.
 
-```
+The implementation will evolve while preserving the project's locked objective and CPU-first, offline-first constraints.
 
-```
+---
+
